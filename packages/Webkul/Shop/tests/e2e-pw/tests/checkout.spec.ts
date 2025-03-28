@@ -217,18 +217,16 @@ test.describe("checkout", () => {
         await shopPage.getByText("Cash On Delivery").first().click();
 
         await shopPage.getByRole("button", { name: "Place Order" }).click();
-        await shopPage.goto("checkout/cart");
-        await shopPage.goto("");
 
-        // /**
-        //  * Confirm Order Completion.
-        //  */
-        // await shopPage.waitForURL("checkout/onepage/success", {
-        //     timeout: 30000,
-        // });
-        // await expect(shopPage.locator("#main")).toContainText(
-        //     "Thank you for your order!"
-        // );
+        /**
+         * Confirm Order Completion.
+         */
+        await shopPage.waitForURL("checkout/onepage/success", {
+            timeout: 30000,
+        });
+        await expect(shopPage.locator("#main")).toContainText(
+            "Thank you for your order!"
+        );
 
         /**
          * Check order to admin side.
@@ -294,15 +292,12 @@ test.describe("checkout", () => {
         await shopPage.getByText("Cash On Delivery").first().click();
 
         await shopPage.getByRole("button", { name: "Place Order" }).click();
-        await shopPage.goto("checkout/cart");
-        await shopPage.goto("");
-
-        // await shopPage.waitForURL("checkout/onepage/success", {
-        //     timeout: 30000,
-        // });
-        // await expect(shopPage.locator("#main")).toContainText(
-        //     "Thank you for your order!"
-        // );
+        await shopPage.waitForURL("checkout/onepage/success", {
+            timeout: 30000,
+        });
+        await expect(shopPage.locator("#main")).toContainText(
+            "Thank you for your order!"
+        );
 
         /**
          * Login to admin panel.
@@ -412,15 +407,10 @@ test.describe("checkout", () => {
         await shopPage.getByText("Cash On Delivery").first().click();
 
         await shopPage.getByRole("button", { name: "Place Order" }).click();
-        await shopPage.goto("checkout/cart");
-        await shopPage.goto("");
+        await expect(shopPage.locator("#main")).toContainText(
+            "Thank you for your order!"
+        );
 
-        // await shopPage.waitForURL("checkout/onepage/success", {
-        //     timeout: 30000,
-        // });
-        // await expect(shopPage.locator("#main")).toContainText(
-        //     "Thank you for your order!"
-        // );
         /**
          * Login to admin panel.
          */
@@ -589,15 +579,9 @@ test.describe("checkout", () => {
         await shopPage.getByText("Cash On Delivery").first().click();
 
         await shopPage.getByRole("button", { name: "Place Order" }).click();
-        await shopPage.goto("checkout/cart");
-        await shopPage.goto("");
-
-        // await shopPage.waitForURL("checkout/onepage/success", {
-        //     timeout: 30000,
-        // });
-        // await expect(shopPage.locator("#main")).toContainText(
-        //     "Thank you for your order!"
-        // );
+        await expect(shopPage.locator("#main")).toContainText(
+            "Thank you for your order!"
+        );
 
         /**
          * Login to admin panel.
