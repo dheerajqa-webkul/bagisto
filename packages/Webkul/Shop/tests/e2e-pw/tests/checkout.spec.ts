@@ -163,7 +163,7 @@ test.describe('checkout', () => {
         await shopPage.locator('.icon-cancel').first().click();
         await shopPage.getByRole('button', { name: 'Shopping Cart' }).click();
         await shopPage.getByRole('link', { name: 'Continue to Checkout' }).click();
-
+        
         /**
          * Fill Customer details.
          */
@@ -205,8 +205,7 @@ test.describe('checkout', () => {
         await shopPage.getByText("Cash On Delivery").first().click();
 
         await shopPage.getByRole("button", { name: "Place Order" }).click();
-        await shopPage.waitForSelector("text=Thank you for your order!");
-        await expect(shopPage.locator("text=Thank you for your order!")).toBeVisible();
+        await expect(shopPage.getByText('Thank you for your order!')).toBeVisible({ timeout: 12000 });
 
         /**
          * Check order to admin side.
@@ -265,8 +264,7 @@ test.describe('checkout', () => {
         await shopPage.getByText("Cash On Delivery").first().click();
 
         await shopPage.getByRole("button", { name: "Place Order" }).click();
-        await shopPage.waitForSelector("text=Thank you for your order!");
-        await expect(shopPage.locator("text=Thank you for your order!")).toBeVisible();
+        await expect(shopPage.getByText('Thank you for your order!')).toBeVisible({ timeout: 12000 });
 
         /**
           * Login to admin panel.
@@ -359,8 +357,7 @@ test.describe('checkout', () => {
         await shopPage.getByText("Cash On Delivery").first().click();
 
         await shopPage.getByRole("button", { name: "Place Order" }).click();
-        await shopPage.waitForSelector("text=Thank you for your order!");
-        await expect(shopPage.locator("text=Thank you for your order!")).toBeVisible();
+        await expect(shopPage.getByText('Thank you for your order!')).toBeVisible({ timeout: 12000 });
 
         /**
           * Login to admin panel.
@@ -452,7 +449,6 @@ test.describe('checkout', () => {
          * Add shipping address.
          */
         await shopPage.locator('div').filter({ hasText: /^Add new address$/ }).nth(2).click();
-
         await shopPage.getByRole('textbox', { name: 'Company Name' }).click();
         await shopPage.getByRole('textbox', { name: 'Company Name' }).fill('Webkul');
         await shopPage.getByRole('textbox', { name: 'First Name' }).click();
@@ -489,8 +485,7 @@ test.describe('checkout', () => {
         await shopPage.getByText("Cash On Delivery").first().click();
 
         await shopPage.getByRole("button", { name: "Place Order" }).click();
-        await shopPage.waitForSelector("text=Thank you for your order!");
-        await expect(shopPage.locator("text=Thank you for your order!")).toBeVisible();
+        await expect(shopPage.getByText('Thank you for your order!')).toBeVisible({ timeout: 12000 });
 
         /**
          * Login to admin panel.
