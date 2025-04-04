@@ -859,7 +859,93 @@ test.describe("simple product management", () => {
         await expect(adminPage.locator('#app')).toContainText('Product updated successfully');
     });
 
-    test("should create a configurable product", async ({ adminPage }) => {
+    test("should mass update the products", async ({ adminPage }) => {
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")'
+        );
+
+        await adminPage.waitForSelector(".icon-uncheckbox:visible", {
+            state: "visible",
+        });
+        const checkboxes = await adminPage.$$(".icon-uncheckbox:visible");
+        await checkboxes[1].click();
+
+        let selectActionButton = await adminPage.waitForSelector(
+            'button:has-text("Select Action")',
+            { timeout: 1000 }
+        );
+        await selectActionButton.click();
+
+        await adminPage.hover('a:has-text("Update Status")', { timeout: 1000 });
+        await adminPage.waitForSelector(
+            'a:has-text("Active"), a:has-text("Disable")',
+            { state: "visible", timeout: 1000 }
+        );
+        await adminPage.click('a:has-text("Active")');
+
+        await adminPage.waitForSelector("text=Are you sure", {
+            state: "visible",
+            timeout: 1000,
+        });
+        const agreeButton = await adminPage.locator(
+            'button.primary-button:has-text("Agree")'
+        );
+
+        if (await agreeButton.isVisible()) {
+            await agreeButton.click();
+        } else {
+            console.error("Agree button not found or not visible.");
+        }
+
+        await expect(
+            adminPage.getByText("Selected Products Updated Successfully")
+        ).toBeVisible();
+    });
+    test("should mass delete the products", async ({ adminPage }) => {
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")',
+            { state: "visible" }
+        );
+
+        await adminPage.waitForSelector(".icon-uncheckbox:visible", {
+            state: "visible",
+        });
+        const checkboxes = await adminPage.$$(".icon-uncheckbox:visible");
+        await checkboxes[1].click();
+
+        let selectActionButton = await adminPage.waitForSelector(
+            'button:has-text("Select Action")',
+            { timeout: 1000 }
+        );
+        await selectActionButton.click();
+
+        await adminPage.click('a:has-text("Delete")', { timeout: 1000 });
+
+        await adminPage.waitForSelector("text=Are you sure", {
+            state: "visible",
+            timeout: 1000,
+        });
+
+        const agreeButton = await adminPage.locator(
+            'button.primary-button:has-text("Agree")'
+        );
+
+        if (await agreeButton.isVisible()) {
+            await agreeButton.click();
+        } else {
+            console.error("Agree button not found or not visible.");
+        }
+
+        await expect(
+            adminPage.getByText("Selected Products Deleted Successfully")
+        ).toBeVisible();
+    });
+});
+
+test.describe("configurable product management", () => {
+   test("should create a configurable product", async ({ adminPage }) => {
         await createConfigurableProduct(adminPage);
     });
 
@@ -905,7 +991,92 @@ test.describe("simple product management", () => {
         await expect(adminPage.locator('#app')).toContainText('Product updated successfully');
     });
 
-    test("should create a grouped product", async ({ adminPage }) => {
+    test("should mass update the products", async ({ adminPage }) => {
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")'
+        );
+
+        await adminPage.waitForSelector("div:nth-child(7) > div > .icon-uncheckbox", {
+            state: "visible",
+        });
+        await adminPage.locator('div:nth-child(7) > div > .icon-uncheckbox').click();
+
+        let selectActionButton = await adminPage.waitForSelector(
+            'button:has-text("Select Action")',
+            { timeout: 1000 }
+        );
+        await selectActionButton.click();
+
+        await adminPage.hover('a:has-text("Update Status")', { timeout: 1000 });
+        await adminPage.waitForSelector(
+            'a:has-text("Active"), a:has-text("Disable")',
+            { state: "visible", timeout: 1000 }
+        );
+        await adminPage.click('a:has-text("Active")');
+
+        await adminPage.waitForSelector("text=Are you sure", {
+            state: "visible",
+            timeout: 1000,
+        });
+        const agreeButton = await adminPage.locator(
+            'button.primary-button:has-text("Agree")'
+        );
+
+        if (await agreeButton.isVisible()) {
+            await agreeButton.click();
+        } else {
+            console.error("Agree button not found or not visible.");
+        }
+
+        await expect(
+            adminPage.getByText("Selected Products Updated Successfully")
+        ).toBeVisible();
+    });
+
+    test("should mass delete the products", async ({ adminPage }) => {
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")',
+            { state: "visible" }
+        );
+
+        await adminPage.waitForSelector("div:nth-child(7) > div > .icon-uncheckbox", {
+            state: "visible",
+        });
+        await adminPage.locator('div:nth-child(7) > div > .icon-uncheckbox').click();
+
+        let selectActionButton = await adminPage.waitForSelector(
+            'button:has-text("Select Action")',
+            { timeout: 1000 }
+        );
+        await selectActionButton.click();
+
+        await adminPage.click('a:has-text("Delete")', { timeout: 1000 });
+
+        await adminPage.waitForSelector("text=Are you sure", {
+            state: "visible",
+            timeout: 1000,
+        });
+
+        const agreeButton = await adminPage.locator(
+            'button.primary-button:has-text("Agree")'
+        );
+
+        if (await agreeButton.isVisible()) {
+            await agreeButton.click();
+        } else {
+            console.error("Agree button not found or not visible.");
+        }
+
+        await expect(
+            adminPage.getByText("Selected Products Deleted Successfully")
+        ).toBeVisible();
+    });
+});
+
+test.describe("grouped product management", () => {
+   test("should create a grouped product", async ({ adminPage }) => {
         await createGroupedProduct(adminPage);
     });
 
@@ -955,8 +1126,93 @@ test.describe("simple product management", () => {
          */
         await expect(adminPage.locator('#app')).toContainText('Product updated successfully');
     });
+    test("should mass update the products", async ({ adminPage }) => {
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")'
+        );
 
-    test("should create a virtual product", async ({ adminPage }) => {
+        await adminPage.waitForSelector(".icon-uncheckbox:visible", {
+            state: "visible",
+        });
+        const checkboxes = await adminPage.$$(".icon-uncheckbox:visible");
+        await checkboxes[1].click();
+
+        let selectActionButton = await adminPage.waitForSelector(
+            'button:has-text("Select Action")',
+            { timeout: 1000 }
+        );
+        await selectActionButton.click();
+
+        await adminPage.hover('a:has-text("Update Status")', { timeout: 1000 });
+        await adminPage.waitForSelector(
+            'a:has-text("Active"), a:has-text("Disable")',
+            { state: "visible", timeout: 1000 }
+        );
+        await adminPage.click('a:has-text("Active")');
+
+        await adminPage.waitForSelector("text=Are you sure", {
+            state: "visible",
+            timeout: 1000,
+        });
+        const agreeButton = await adminPage.locator(
+            'button.primary-button:has-text("Agree")'
+        );
+
+        if (await agreeButton.isVisible()) {
+            await agreeButton.click();
+        } else {
+            console.error("Agree button not found or not visible.");
+        }
+
+        await expect(
+            adminPage.getByText("Selected Products Updated Successfully")
+        ).toBeVisible();
+    });
+    test("should mass delete the products", async ({ adminPage }) => {
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")',
+            { state: "visible" }
+        );
+
+        await adminPage.waitForSelector(".icon-uncheckbox:visible", {
+            state: "visible",
+        });
+        const checkboxes = await adminPage.$$(".icon-uncheckbox:visible");
+        await checkboxes[1].click();
+
+        let selectActionButton = await adminPage.waitForSelector(
+            'button:has-text("Select Action")',
+            { timeout: 1000 }
+        );
+        await selectActionButton.click();
+
+        await adminPage.click('a:has-text("Delete")', { timeout: 1000 });
+
+        await adminPage.waitForSelector("text=Are you sure", {
+            state: "visible",
+            timeout: 1000,
+        });
+
+        const agreeButton = await adminPage.locator(
+            'button.primary-button:has-text("Agree")'
+        );
+
+        if (await agreeButton.isVisible()) {
+            await agreeButton.click();
+        } else {
+            console.error("Agree button not found or not visible.");
+        }
+
+        await expect(
+            adminPage.getByText("Selected Products Deleted Successfully")
+        ).toBeVisible();
+    });
+});
+
+ test.describe("virtual product management", () => {
+   test("should create a virtual product", async ({ adminPage }) => {
         await createVirtualProduct(adminPage);
     });
 
@@ -992,55 +1248,6 @@ test.describe("simple product management", () => {
          * Saving the product.
          */
         await adminPage.getByRole("button", { name: "Save Product" }).click();
-
-        /**
-         * Expecting for the product to be saved.
-         */
-        await expect(adminPage.locator('#app')).toContainText('Product updated successfully');
-    });
-
-    test("should create a downloadable product", async ({ adminPage }) => {
-        await createDownloadableProduct(adminPage);
-    });
-
-    test("should edit a downloadable product", async ({ adminPage }) => {
-        /**
-         * Reaching to the edit product page.
-         */
-        await adminPage.goto("admin/catalog/products");
-        await adminPage.waitForSelector(
-            'button.primary-button:has-text("Create Product")'
-        );
-        await adminPage.waitForSelector("span.cursor-pointer.icon-sort-right", {
-            state: "visible",
-        });
-        const iconRight = await adminPage.$$(
-            "span.cursor-pointer.icon-sort-right"
-        );
-        await iconRight[0].click();
-
-        /**
-         * Waiting for the main form to be visible.
-         */
-        await adminPage.waitForSelector('form[enctype="multipart/form-data"]');
-
-        /**
-         * Edit price, edit downloadable links.
-         */
-        await adminPage.locator('#price').fill('100');
-        await adminPage.getByText('Edit', { exact: true }).first().click();
-        await adminPage.waitForSelector('.min-h-0 > div > div');
-        await adminPage.locator('input[name="file"]').nth(1).setInputFiles(path.resolve(__dirname, '../../data/images/2.webp'));
-
-        /**
-         * Saving the downloadable link.
-         */
-        await adminPage.getByRole('button', { name: 'Save', exact: true }).click();
-
-        /**
-         * Saving the product.
-         */
-        await adminPage.getByRole('button', { name: 'Save Product' }).click();
 
         /**
          * Expecting for the product to be saved.
@@ -1132,6 +1339,140 @@ test.describe("simple product management", () => {
             adminPage.getByText("Selected Products Deleted Successfully")
         ).toBeVisible();
     });
+});
+
+test.describe("downloadable product management", () => {
+  test("should create a downloadable product", async ({ adminPage }) => {
+        await createDownloadableProduct(adminPage);
+    });
+    test("should edit a downloadable product", async ({ adminPage }) => {
+        /**
+         * Reaching to the edit product page.
+         */
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")'
+        );
+        await adminPage.waitForSelector("span.cursor-pointer.icon-sort-right", {
+            state: "visible",
+        });
+        const iconRight = await adminPage.$$(
+            "span.cursor-pointer.icon-sort-right"
+        );
+        await iconRight[0].click();
+
+        /**
+         * Waiting for the main form to be visible.
+         */
+        await adminPage.waitForSelector('form[enctype="multipart/form-data"]');
+
+        /**
+         * Edit price, edit downloadable links.
+         */
+        await adminPage.locator('#price').fill('100');
+        await adminPage.getByText('Edit', { exact: true }).first().click();
+        await adminPage.waitForSelector('.min-h-0 > div > div');
+        await adminPage.locator('input[name="file"]').nth(1).setInputFiles(path.resolve(__dirname, '../../data/images/2.webp'));
+
+        /**
+         * Saving the downloadable link.
+         */
+        await adminPage.getByRole('button', { name: 'Save', exact: true }).click();
+
+        /**
+         * Saving the product.
+         */
+        await adminPage.getByRole('button', { name: 'Save Product' }).click();
+
+        /**
+         * Expecting for the product to be saved.
+         */
+        await expect(adminPage.locator('#app')).toContainText('Product updated successfully');
+    });
+    test("should mass update the products", async ({ adminPage }) => {
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")'
+        );
+
+        await adminPage.waitForSelector(".icon-uncheckbox:visible", {
+            state: "visible",
+        });
+        const checkboxes = await adminPage.$$(".icon-uncheckbox:visible");
+        await checkboxes[1].click();
+
+        let selectActionButton = await adminPage.waitForSelector(
+            'button:has-text("Select Action")',
+            { timeout: 1000 }
+        );
+        await selectActionButton.click();
+
+        await adminPage.hover('a:has-text("Update Status")', { timeout: 1000 });
+        await adminPage.waitForSelector(
+            'a:has-text("Active"), a:has-text("Disable")',
+            { state: "visible", timeout: 1000 }
+        );
+        await adminPage.click('a:has-text("Active")');
+
+        await adminPage.waitForSelector("text=Are you sure", {
+            state: "visible",
+            timeout: 1000,
+        });
+        const agreeButton = await adminPage.locator(
+            'button.primary-button:has-text("Agree")'
+        );
+
+        if (await agreeButton.isVisible()) {
+            await agreeButton.click();
+        } else {
+            console.error("Agree button not found or not visible.");
+        }
+
+        await expect(
+            adminPage.getByText("Selected Products Updated Successfully")
+        ).toBeVisible();
+    });
+    test("should mass delete the products", async ({ adminPage }) => {
+        await adminPage.goto("admin/catalog/products");
+        await adminPage.waitForSelector(
+            'button.primary-button:has-text("Create Product")',
+            { state: "visible" }
+        );
+
+        await adminPage.waitForSelector(".icon-uncheckbox:visible", {
+            state: "visible",
+        });
+        const checkboxes = await adminPage.$$(".icon-uncheckbox:visible");
+        await checkboxes[1].click();
+
+        let selectActionButton = await adminPage.waitForSelector(
+            'button:has-text("Select Action")',
+            { timeout: 1000 }
+        );
+        await selectActionButton.click();
+
+        await adminPage.click('a:has-text("Delete")', { timeout: 1000 });
+
+        await adminPage.waitForSelector("text=Are you sure", {
+            state: "visible",
+            timeout: 1000,
+        });
+
+        const agreeButton = await adminPage.locator(
+            'button.primary-button:has-text("Agree")'
+        );
+
+        if (await agreeButton.isVisible()) {
+            await agreeButton.click();
+        } else {
+            console.error("Agree button not found or not visible.");
+        }
+
+        await expect(
+            adminPage.getByText("Selected Products Deleted Successfully")
+        ).toBeVisible();
+    });
+    
 });
 
 test.describe("booking product management", () => {
