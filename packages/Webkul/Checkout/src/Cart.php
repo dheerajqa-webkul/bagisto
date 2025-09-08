@@ -431,6 +431,7 @@ class Cart
                 'company_name',
                 'first_name',
                 'last_name',
+                'vat_id',
                 'email',
                 'address',
                 'country',
@@ -641,7 +642,11 @@ class Cart
         $result = $this->addProduct($wishlistItem->product, $additional);
 
         if ($result) {
+            Event::dispatch('customer.wishlist.delete.before', $wishlistItem->id);
+
             $this->wishlistRepository->delete($wishlistItem->id);
+
+            Event::dispatch('customer.wishlist.delete.after', $wishlistItem->id);
 
             return true;
         }
@@ -680,7 +685,9 @@ class Cart
         }
 
         if (! $found) {
-            $this->wishlistRepository->create([
+            Event::dispatch('customer.wishlist.create.before', $cartItem->product_id);
+
+            $wishlist = $this->wishlistRepository->create([
                 'channel_id'  => $this->cart->channel_id,
                 'customer_id' => $this->cart->customer_id,
                 'product_id'  => $cartItem->product_id,
@@ -689,6 +696,8 @@ class Cart
                     'quantity' => $quantity,
                 ],
             ]);
+
+            Event::dispatch('customer.wishlist.create.after', $wishlist);
         }
 
         if (! $this->cart->items->count()) {
