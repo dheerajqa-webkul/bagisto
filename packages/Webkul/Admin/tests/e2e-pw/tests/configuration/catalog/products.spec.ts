@@ -302,48 +302,22 @@ test.describe("product configuration", () => {
     test("should update the allowed image and file upload size", async ({
         adminPage,
     }) => {
-        const imageLocator = adminPage.locator(
+        const imageSizeLocator = adminPage.locator(
             'input[name="catalog[products][attribute][image_attribute_upload_size]"]'
         );
-        const fileLocator = adminPage.locator(
-            'input[name="catalog[products][attribute][file_attribute_upload_size]"]'
-        );
-    test("should update the allowed image and file upload size", async ({
-        adminPage,
-    }) => {
-        const imageLocator = adminPage.locator(
-            'input[name="catalog[products][attribute][image_attribute_upload_size]"]'
-        );
-        const fileLocator = adminPage.locator(
+        const fileSizeLocator = adminPage.locator(
             'input[name="catalog[products][attribute][file_attribute_upload_size]"]'
         );
 
         // Save original values to revert later
-        const originalImage = await imageLocator.inputValue();
-        const originalFil
+        const originalImageSize = await imageSizeLocator.inputValue();
+        const originalFileSize = await fileSizeLocator.inputValue();
 
-        // Save original values to revert later
-        const originalImage = await imageLocator.inputValue();
-        const originalFil
-    test("should update the allowed image and file upload size", async ({
-        adminPage,
-    }) => {
-        const imageLocator = adminPage.locator(
-            'input[name="catalog[products][attribute][image_attribute_upload_size]"]'
-        );
-        const fileLocator = adminPage.locator(
-            'input[name="catalog[products][attribute][file_attribute_upload_size]"]'
-        );
-
-        // Save original values to revert later
-        const originalImage = await imageLocator.inputValue();
-        const originalFile = await fileLocator.inputValue();
-
-        await imageLocator.fill(generateRandomNumericString(3));
-        await fileLocator.fill(generateRandomNumericString(3));
+        // Apply temporary changes
+        await imageSizeLocator.fill(generateRandomNumericString(3));
+        await fileSizeLocator.fill(generateRandomNumericString(3));
         await adminPage.click('button[type="submit"].primary-button:visible');
-// Revert numeric entries back to original and save
-        await imageLocato
+
         /**
          * Verify the change is saved.
          */
@@ -352,15 +326,15 @@ test.describe("product configuration", () => {
         ).toBeVisible();
 
         // Revert numeric entries back to original and save
-        await imageLocator.fill(originalImage);
-        await fileLocator.fill(originalFile);
+        await imageSizeLocator.fill(originalImageSize);
+        await fileSizeLocator.fill(originalFileSize);
         await adminPage.click('button[type="submit"].primary-button:visible');
         await expect(
             adminPage.locator("#app p", { hasText: "Configuration saved successfully" })
         ).toBeVisible();
-    });https://github.com/dheerajqa-webkul/bagisto.git
+    });
 
-https://github.com/dheerajqa-webkul/bagisto.git    test("should update social share configuration", async ({ adminPage }) => {
+    test("should update social share configuration", async ({ adminPage }) => {
         await adminPage.click(
             'label[for="catalog[products][social_share][enabled]"]'
         );
