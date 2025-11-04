@@ -30,6 +30,15 @@ test.describe("product configuration", () => {
          * Verify the change is saved.
          */
         await expect(adminPage.locator('#app p' , { hasText: 'Configuration saved successfully' })).toBeVisible();
+
+         await adminPage.click(
+            'label[for="catalog[products][settings][compare_option]"]'
+        );
+        await adminPage.click(
+            'label[for="catalog[products][settings][image_search]"]'
+        );
+
+        await adminPage.click('button[type="submit"].primary-button:visible');
     });
 
     /**
@@ -109,21 +118,31 @@ test.describe("product configuration", () => {
          * Verify the change is saved.
          */
         await expect(adminPage.locator('#app p' , { hasText: 'Configuration saved successfully' })).toBeVisible();
+
+         await adminPage.click(
+            'label[for="catalog[products][storefront][buy_now_button_display]"]'
+        );
+
+        await adminPage.click('button[type="submit"].primary-button:visible');
+
     });
 
     test("should update the small image size and placeholder", async ({
         adminPage,
     }) => {
-        await adminPage
-            .locator(
-                'input[name="catalog[products][cache_small_image][width]"]'
-            )
-            .fill(generateRandomNumericString(3));
-        await adminPage
-            .locator(
-                'input[name="catalog[products][cache_small_image][height]"]'
-            )
-            .fill(generateRandomNumericString(3));
+        const widthLocator = adminPage.locator(
+            'input[name="catalog[products][cache_small_image][width]"]'
+        );
+        const heightLocator = adminPage.locator(
+            'input[name="catalog[products][cache_small_image][height]"]'
+        );
+
+        // Save original values to revert later
+        const originalWidth = await widthLocator.inputValue();
+        const originalHeight = await heightLocator.inputValue();
+
+        await widthLocator.fill(generateRandomNumericString(3));
+        await heightLocator.fill(generateRandomNumericString(3));
 
         const [fileChooser] = await Promise.all([
             adminPage.waitForEvent("filechooser"),
@@ -134,7 +153,7 @@ test.describe("product configuration", () => {
         await adminPage.click('button[type="submit"].primary-button:visible');
 
         /**
-         * Delete the uploaded favicon.
+         * Delete the uploaded placeholder.
          */
         await adminPage
             .locator(
@@ -147,22 +166,31 @@ test.describe("product configuration", () => {
         /**
          * Verify the change is saved.
          */
-        await expect(adminPage.locator('#app p' , { hasText: 'Configuration saved successfully' })).toBeVisible();
+        await expect(adminPage.locator('#app p', { hasText: 'Configuration saved successfully' })).toBeVisible();
+
+        // Revert numeric entries back to original and save
+        await widthLocator.fill(originalWidth);
+        await heightLocator.fill(originalHeight);
+        await adminPage.click('button[type="submit"].primary-button:visible');
+        await expect(adminPage.locator('#app p', { hasText: 'Configuration saved successfully' })).toBeVisible();
     });
 
     test("should update the medium image size and placeholder", async ({
         adminPage,
     }) => {
-        await adminPage
-            .locator(
-                'input[name="catalog[products][cache_medium_image][width]"]'
-            )
-            .fill(generateRandomNumericString(3));
-        await adminPage
-            .locator(
-                'input[name="catalog[products][cache_medium_image][height]"]'
-            )
-            .fill(generateRandomNumericString(3));
+        const widthLocator = adminPage.locator(
+            'input[name="catalog[products][cache_medium_image][width]"]'
+        );
+        const heightLocator = adminPage.locator(
+            'input[name="catalog[products][cache_medium_image][height]"]'
+        );
+
+        // Save original values to revert later
+        const originalWidth = await widthLocator.inputValue();
+        const originalHeight = await heightLocator.inputValue();
+
+        await widthLocator.fill(generateRandomNumericString(3));
+        await heightLocator.fill(generateRandomNumericString(3));
 
         const [fileChooser] = await Promise.all([
             adminPage.waitForEvent("filechooser"),
@@ -173,7 +201,7 @@ test.describe("product configuration", () => {
         await adminPage.click('button[type="submit"].primary-button:visible');
 
         /**
-         * Delete the uploaded favicon.
+         * Delete the uploaded placeholder.
          */
         await adminPage
             .locator(
@@ -186,22 +214,33 @@ test.describe("product configuration", () => {
         /**
          * Verify the change is saved.
          */
-        await expect(adminPage.locator('#app p' , { hasText: 'Configuration saved successfully' })).toBeVisible();
+        await expect(adminPage.locator('#app p', { hasText: 'Configuration saved successfully' })).toBeVisible();
+
+        // Revert numeric entries back to original and save
+        await widthLocator.fill(originalWidth);
+        await heightLocator.fill(originalHeight);
+        await adminPage.click('button[type="submit"].primary-button:visible');
+        await expect(adminPage.locator('#app p', { hasText: 'Configuration saved successfully' })).toBeVisible();
     });
 
     test("should update the large image size and placeholder", async ({
         adminPage,
     }) => {
-        await adminPage
-            .locator(
-                'input[name="catalog[products][cache_large_image][width]"]'
-            )
-            .fill(generateRandomNumericString(3));
-        await adminPage
-            .locator(
-                'input[name="catalog[products][cache_large_image][height]"]'
-            )
-            .fill(generateRandomNumericString(3));
+        const widthLocator = adminPage.locator(
+            'input[name="catalog[products][cache_large_image][width]"]'
+        );
+        const heightLocator = adminPage.locator(
+            'input[name="catalog[products][cache_large_image][height]"]'
+        );
+
+        /**
+         * Save original values to revert later
+         */ 
+        const originalWidth = await widthLocator.inputValue();
+        const originalHeight = await heightLocator.inputValue();
+
+        await widthLocator.fill(generateRandomNumericString(3));
+        await heightLocator.fill(generateRandomNumericString(3));
 
         const [fileChooser] = await Promise.all([
             adminPage.waitForEvent("filechooser"),
@@ -212,7 +251,7 @@ test.describe("product configuration", () => {
         await adminPage.click('button[type="submit"].primary-button:visible');
 
         /**
-         * Delete the uploaded favicon.
+         * Delete the uploaded placeholder.
          */
         await adminPage
             .locator(
@@ -225,7 +264,13 @@ test.describe("product configuration", () => {
         /**
          * Verify the change is saved.
          */
-        await expect(adminPage.locator('#app p' , { hasText: 'Configuration saved successfully' })).toBeVisible();
+        await expect(adminPage.locator('#app p', { hasText: 'Configuration saved successfully' })).toBeVisible();
+
+        // Revert numeric entries back to original and save
+        await widthLocator.fill(originalWidth);
+        await heightLocator.fill(originalHeight);
+        await adminPage.click('button[type="submit"].primary-button:visible');
+        await expect(adminPage.locator('#app p', { hasText: 'Configuration saved successfully' })).toBeVisible();
     });
 
     test("should update the review configuration", async ({ adminPage }) => {
@@ -257,22 +302,35 @@ test.describe("product configuration", () => {
     test("should update the allowed image and file upload size", async ({
         adminPage,
     }) => {
-        await adminPage
-            .locator(
-                'input[name="catalog[products][attribute][image_attribute_upload_size]"]'
-            )
-            .fill(generateRandomNumericString(3));
-        await adminPage
-            .locator(
-                'input[name="catalog[products][attribute][file_attribute_upload_size]"]'
-            )
-            .fill(generateRandomNumericString(3));
+        const imageLocator = adminPage.locator(
+            'input[name="catalog[products][attribute][image_attribute_upload_size]"]'
+        );
+        const fileLocator = adminPage.locator(
+            'input[name="catalog[products][attribute][file_attribute_upload_size]"]'
+        );
+
+        // Save original values to revert later
+        const originalImage = await imageLocator.inputValue();
+        const originalFile = await fileLocator.inputValue();
+
+        await imageLocator.fill(generateRandomNumericString(3));
+        await fileLocator.fill(generateRandomNumericString(3));
         await adminPage.click('button[type="submit"].primary-button:visible');
 
         /**
          * Verify the change is saved.
          */
-        await expect(adminPage.locator('#app p' , { hasText: 'Configuration saved successfully' })).toBeVisible();
+        await expect(
+            adminPage.locator("#app p", { hasText: "Configuration saved successfully" })
+        ).toBeVisible();
+
+        // Revert numeric entries back to original and save
+        await imageLocator.fill(originalImage);
+        await fileLocator.fill(originalFile);
+        await adminPage.click('button[type="submit"].primary-button:visible');
+        await expect(
+            adminPage.locator("#app p", { hasText: "Configuration saved successfully" })
+        ).toBeVisible();
     });
 
     test("should update social share configuration", async ({ adminPage }) => {
