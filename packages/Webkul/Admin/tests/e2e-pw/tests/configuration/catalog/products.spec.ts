@@ -308,6 +308,32 @@ test.describe("product configuration", () => {
         const fileLocator = adminPage.locator(
             'input[name="catalog[products][attribute][file_attribute_upload_size]"]'
         );
+    test("should update the allowed image and file upload size", async ({
+        adminPage,
+    }) => {
+        const imageLocator = adminPage.locator(
+            'input[name="catalog[products][attribute][image_attribute_upload_size]"]'
+        );
+        const fileLocator = adminPage.locator(
+            'input[name="catalog[products][attribute][file_attribute_upload_size]"]'
+        );
+
+        // Save original values to revert later
+        const originalImage = await imageLocator.inputValue();
+        const originalFil
+
+        // Save original values to revert later
+        const originalImage = await imageLocator.inputValue();
+        const originalFil
+    test("should update the allowed image and file upload size", async ({
+        adminPage,
+    }) => {
+        const imageLocator = adminPage.locator(
+            'input[name="catalog[products][attribute][image_attribute_upload_size]"]'
+        );
+        const fileLocator = adminPage.locator(
+            'input[name="catalog[products][attribute][file_attribute_upload_size]"]'
+        );
 
         // Save original values to revert later
         const originalImage = await imageLocator.inputValue();
@@ -316,7 +342,8 @@ test.describe("product configuration", () => {
         await imageLocator.fill(generateRandomNumericString(3));
         await fileLocator.fill(generateRandomNumericString(3));
         await adminPage.click('button[type="submit"].primary-button:visible');
-
+// Revert numeric entries back to original and save
+        await imageLocato
         /**
          * Verify the change is saved.
          */
@@ -331,9 +358,9 @@ test.describe("product configuration", () => {
         await expect(
             adminPage.locator("#app p", { hasText: "Configuration saved successfully" })
         ).toBeVisible();
-    });
+    });https://github.com/dheerajqa-webkul/bagisto.git
 
-    test("should update social share configuration", async ({ adminPage }) => {
+https://github.com/dheerajqa-webkul/bagisto.git    test("should update social share configuration", async ({ adminPage }) => {
         await adminPage.click(
             'label[for="catalog[products][social_share][enabled]"]'
         );
