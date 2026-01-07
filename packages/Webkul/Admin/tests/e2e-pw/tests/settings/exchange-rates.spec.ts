@@ -1,28 +1,50 @@
 import { test, expect } from '../../setup';
 
 test.describe('exchange rate management', () => {
-    test('create exchange rate', async ({ adminPage }) => {
+test('create exchange rate', async ({ adminPage }) => {
   await adminPage.goto('admin/settings/exchange-rates');
+  await adminPage.waitForLoadState('networkidle');
 
   await adminPage.click('button.primary-button:visible');
 
+  /**
+   *  Wait for select to be visible
+   */
   const select = adminPage.locator('select[name="target_currency"]');
+  await select.waitFor({ state: 'visible' });
+
+  /**
+   * Get options
+   */ 
   const options = await select.locator('option').all();
 
   const value = await select.evaluate((el: HTMLSelectElement) =>
-  el.options[1]?.value ?? el.options[0].value
-);
+    el.options[1]?.value ?? el.options[0].value
+  );
 
-await select.selectOption(value);
-
+  await select.selectOption(value);
+  
+  /**
+   * Wait for any onChange handlers
+   */ 
+  await adminPage.waitForTimeout(300);
 
   await adminPage.fill('input[name="rate"]', (Math.random() * 500).toFixed(2));
 
-  // ✅ Click Save instead of Enter
-  await adminPage.getByRole('button', { name: 'Save Exchange Rate' }).click();
+  /**
+   * Wait for button and click
+   */ 
+  const saveButton = adminPage.getByRole('button', { name: 'Save Exchange Rate' });
+  await saveButton.waitFor({ state: 'visible' });
+  await expect(saveButton).toBeEnabled();
+  await saveButton.click();
 
-  // ✅ Assert robustly
- await expect(adminPage.getByText('Exchange Rate Created')).toBeVisible();
+  /**
+   * Assert with timeout
+   */ 
+  await expect(adminPage.getByText('Exchange Rate Created')).toBeVisible({ 
+    timeout: 10000 
+  });
 });
 
 
